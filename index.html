@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>moonlight · liquid links</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,500;14..32,700;14..32,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDKs (Compat version for easier use) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #030405;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ---------- LOADER (7s exact, no fade, just remove) ---------- */
+        #liquid-loader {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: #0b0712;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(8px);
+            transition: none;
+            will-change: transform;
+        }
+
+        #liquid-loader.loaded {
+            display: none;
+        }
+
+        .loader-spinner {
+            width: 90px;
+            height: 90px;
+            border: 5px solid rgba(190, 160, 255, 0.2);
+            border-top: 5px solid #c3a8ff;
+            border-right: 5px solid #8950e0;
+            border-bottom: 5px solid #5b2d9c;
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            box-shadow: 0 0 30px #b07eff, 0 0 15px #5a2ca0 inset;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(360deg) scale(1.1); border-top-color: #e4b5ff; border-right-color: #a66eff; }
+            100% { transform: rotate(720deg) scale(1); }
+        }
+
+        .loader-text {
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #f2e9ff, #ffffff, #dac5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            text-shadow: 0 0 25px #a06eff;
+        }
+
+        /* ---------- BACKGROUND IMAGE (fixed full cover, no black gap) ---------- */
+        #bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -3;
+            opacity: 0.6;
+            pointer-events: none;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        /* orbs & grain — smooth with translateZ */
+        .liquid-orb {
+            position: fixed;
+            width: 70vmax;
+            height: 70vmax;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(190, 160, 255, 0.4), rgba(40, 10, 70, 0.8));
+            filter: blur(100px);
+            z-index: -2;
+            animation: liquidMove 28s infinite alternate ease-in-out;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .orb2 {
+            width: 90vmin;
+            height: 90vmin;
+            bottom: 0;
+            right: 0;
+            background: radial-gradient(circle at 70% 70%, #2a1b3a, #0b0712);
+            filter: blur(120px);
+            animation: liquidMove2 22s infinite alternate;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        @keyframes liquidMove {
+            0% { transform: translate(-20%, -20%) scale(1); opacity: 0.5; }
+            100% { transform: translate(10%, 20%) scale(1.3); opacity: 0.8; }
+        }
+        @keyframes liquidMove2 {
+            0% { transform: translate(15%, 5%) scale(0.9); }
+            100% { transform: translate(-10%, -15%) scale(1.4); }
+        }
+
+        .grain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.2;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            width: 90%;
+            margin: 2rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            overflow: visible;
+        }
+
+        /* ---------- GLOBAL CLICK COUNTER (Top of page) - NO PULSE, STATIC ---------- */
+        .global-click-counter {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 30;
+        }
+        
+        .click-badge {
+            background: rgba(22, 18, 30, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(230, 200, 255, 0.25);
+            border-radius: 60px;
+            padding: 0.6rem 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: #f0eaff;
+        }
+        
+        .click-badge i {
+            font-size: 1.3rem;
+            color: #ccb5ff;
+            /* NO ANIMATION - static */
+        }
+        
+        .click-count-number {
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #e4daff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.3rem;
+        }
+
+        .banner-frame {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 2.5rem;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            backdrop-filter: blur(12px);
+            margin-bottom: 2.2rem;
+        }
+
+        .banner-liquid {
+            width: 100%;
+            height: 100%;
+            border-radius: 2rem;
+            overflow: hidden;
+            position: relative;
+            background: #1a1625;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-liquid img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: transparent;
+        }
+
+        .banner-liquid::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* AVATAR – no clipping, smooth shadow */
+        .avatar-blob {
+            width: 200px;
+            height: 200px;
+            margin-top: -100px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 18px 40px rgba(140, 70, 255, 0.9));
+            z-index: 20;
+            transition: none;
+            position: relative;
+            transform: translateZ(0);
+        }
+
+        .avatar-blob svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            filter: drop-shadow(0 4px 15px black);
+        }
+
+        .avatar-blob:hover {
+            transform: none;
+            filter: drop-shadow(0 18px 40px rgba(140, 70, 255, 0.9));
+        }
+
+        .profile-name {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            background: linear-gradient(130deg, #f2e9ff, #ffffff, #dac5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(210, 160, 255, 0.5);
+            margin-bottom: 0.1rem;
+            line-height: 1.1;
+        }
+
+        .sub-tag {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #c0b5d6;
+            background: rgba(10, 5, 20, 0.5);
+            padding: 0.3rem 1.5rem;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 1.2rem;
+            border: 1px solid rgba(255,255,240,0.1);
+        }
+
+        .icon-ring {
+            display: flex;
+            gap: 1.8rem;
+            margin: 1.8rem 0 2rem;
+        }
+
+        .icon-ring a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: 40% 60% 70% 30% / 50% 40% 60% 50%;
+            background: rgba(40, 30, 55, 0.7);
+            backdrop-filter: blur(12px);
+            font-size: 2.1rem;
+            color: white;
+            border: 2px solid rgba(255, 220, 255, 0.2);
+            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.7);
+            transition: none;
+            text-decoration: none;
+        }
+
+        .icon-ring a:nth-child(1) { color: #ffffff; }
+        .icon-ring a:nth-child(2) { color: #ff8a80; }
+        .icon-ring a:nth-child(3) { color: #29a9e0; }
+
+        .icon-ring a:hover {
+            border-radius: 40% 60% 70% 30% / 50% 40% 60% 50%;
+            background: rgba(40, 30, 55, 0.7);
+            border-color: rgba(255, 220, 255, 0.2);
+            transform: none;
+        }
+
+        .cta-liquid {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: rgba(20, 15, 30, 0.6);
+            backdrop-filter: blur(20px);
+            padding: 0.6rem 2.2rem;
+            border-radius: 120px;
+            margin: 1rem 0 2.5rem;
+            border: 1px solid rgba(230, 190, 255, 0.3);
+            box-shadow: 0 0 30px rgba(180, 130, 255, 0.3);
+            letter-spacing: 1px;
+            color: #f0eaff;
+            text-align: center;
+        }
+
+        .card-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .liquid-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem 1rem 1rem;
+            background: rgba(22, 18, 30, 0.6);
+            backdrop-filter: blur(16px);
+            border-radius: 80px 20px 20px 80px;
+            border: 1px solid rgba(230, 200, 255, 0.15);
+            box-shadow: 0 20px 40px -15px black, 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            text-decoration: none;
+            color: white;
+            transition: none;
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            position: relative;
+        }
+
+        .liquid-card:hover {
+            border-radius: 80px 20px 20px 80px;
+            background: rgba(22, 18, 30, 0.6);
+            border-color: rgba(230, 200, 255, 0.15);
+            box-shadow: 0 20px 40px -15px black, 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            transform: none;
+        }
+
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%;
+            background: linear-gradient(145deg, #2e2640, #181226);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin-right: 1.5rem;
+            border: 1px solid rgba(255, 215, 255, 0.3);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+            flex-shrink: 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Style for cards with images */
+        .liquid-card.has-image .card-icon {
+            background: #1b1428;
+            padding: 0;
+        }
+        
+        .liquid-card.has-image .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 1;
+            filter: none;
+            z-index: 1;
+        }
+        
+        .liquid-card.has-image .card-icon i {
+            position: relative;
+            z-index: 3;
+            text-shadow: 0 0 15px black, 0 0 30px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+        }
+        
+        /* Very subtle overlay */
+        .liquid-card.has-image .card-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: inherit;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Click counter on each card - NO BLACK BACKGROUND, JUST SUBTLE TEXT */
+        .card-click-counter {
+            position: absolute;
+            bottom: 8px;
+            right: 15px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: rgba(180, 170, 210, 0.7);
+            z-index: 5;
+            pointer-events: none;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .card-click-counter i {
+            font-size: 0.75rem;
+            color: rgba(200, 180, 255, 0.6);
+        }
+
+        /* Specific colors for original icons (when no image) */
+        .liquid-card:not(.has-image):nth-child(1) .card-icon { color: #ff3b3b; }    /* youtube */
+        .liquid-card:not(.has-image):nth-child(2) .card-icon { color: #29a9e0; }    /* telegram */
+        .liquid-card:not(.has-image):nth-child(3) .card-icon { background: radial-gradient(circle at 30% 30%, #feda77, #d62976, #4f5bd5); color: white; }  /* instagram */
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            background: linear-gradient(135deg, #fff, #e4daff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card-info p {
+            color: #b9adcf;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-arrow {
+            font-size: 1.8rem;
+            color: #ccb5ff;
+            opacity: 0.7;
+            transition: none;
+            margin-left: 0.2rem;
+        }
+
+        .liquid-card:hover .card-arrow {
+            transform: none;
+            opacity: 0.7;
+        }
+
+        .liquid-footer {
+            margin-top: 2.5rem;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            background: rgba(14, 10, 22, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 60px 60px 30px 30px;
+            border: 1px solid rgba(255, 200, 255, 0.1);
+            text-align: center;
+            color: #b7aad3;
+        }
+
+        .liquid-footer a {
+            color: #f0dbff;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px dotted rgba(210, 170, 250, 0.6);
+        }
+
+        .liquid-footer a:hover {
+            color: white;
+            border-bottom: 2px solid #c89eff;
+        }
+
+        @media (max-width: 650px) {
+            .profile-name { font-size: 2.8rem; }
+            .avatar-blob { width: 160px; height: 160px; margin-top: -80px; }
+            .icon-ring a { width: 60px; height: 60px; font-size: 1.8rem; }
+            .cta-liquid { font-size: 1.3rem; }
+            .card-icon { width: 60px; height: 60px; font-size: 1.9rem; }
+            .card-click-counter { font-size: 0.7rem; }
+        }
+
+        /* smoothness improvements */
+        .liquid-card, .avatar-blob, .icon-ring a {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .banner-liquid img, .avatar-blob svg image {
+            image-rendering: -webkit-optimize-contrast;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOADER – 7 seconds, no fade, just removed, text "loading..." -->
+    <div id="liquid-loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">loading...</div>
+    </div>
+
+    <!-- BACKGROUND IMAGE -->
+    <img id="bg-image" src="images/backgroud.jpg" alt="background" 
+         onerror="this.onerror=null; this.src='https://placehold.co/1920x1080/1a1430/aa99ff?text=background+image'">
+
+    <div class="liquid-orb" style="top: -10%; left: -5%;"></div>
+    <div class="liquid-orb orb2" style="bottom: -10%; right: -5%;"></div>
+    <div class="grain"></div>
+
+    <div class="main-container">
+        <!-- GLOBAL CLICK COUNTER (Top of page) - STATIC, NO PULSE -->
+        <div class="global-click-counter">
+            <div class="click-badge">
+                <i class="fas fa-eye"></i>
+                <span class="click-count-number" id="globalClickCount">0</span>
+                <span>Total Clicks</span>
+            </div>
+        </div>
+        
+        <div class="banner-frame">
+            <div class="banner-liquid">
+                <img src="images/bannerrr.jpg" onerror="this.onerror=null; this.src='https://placehold.co/1600x900/252033/d9c9ff?text=Moonlight+16:9&font=montserrat'" alt="moonlight banner">
+            </div>
+        </div>
+
+        <!-- profile avatar (blob) -->
+        <div class="avatar-blob">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="blobGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#a386e0" />
+                        <stop offset="100%" stop-color="#4a2f7a" />
+                    </linearGradient>
+                </defs>
+                <clipPath id="blobClip">
+                    <path d="M66.5 12.8 C78 18 88 29 90.5 41.5 93 54 88 68.5 78.5 78 69 87.5 53 93 39 90 25 87 11 76 8 62 5 48 11 30 23 19.5 35 9 52 6.5 66.5 12.8Z" fill="url(#blobGrad)"/>
+                </clipPath>
+                <image href="images/profilpic.jpg" onerror="this.onerror=null; this.href='https://placehold.co/400x400/3a2f55/ffffff?text=Moon'" width="100" height="100" clip-path="url(#blobClip)" preserveAspectRatio="xMidYMid slice" />
+                <path d="M66.5 12.8 C78 18 88 29 90.5 41.5 93 54 88 68.5 78.5 78 69 87.5 53 93 39 90 25 87 11 76 8 62 5 48 11 30 23 19.5 35 9 52 6.5 66.5 12.8Z" fill="none" stroke="rgba(255,240,255,0.3)" stroke-width="1.5" />
+            </svg>
+        </div>
+
+        <h1 class="profile-name">MOONLIGHT</h1>
+        <div class="sub-tag">@moonlight_kunn · liquid vision</div>
+
+        <div class="icon-ring">
+            <a href="https://www.tiktok.com/@moonlight_kunn?_r=1&_t=ZT-94ZsJ5Fyaoo" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://youtube.com/@moonlight_kunnn?si=AYiAX4ARjEhpM9KN" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://t.me/editing_haven" target="_blank"><i class="fab fa-telegram"></i></a>
+        </div>
+
+        <div class="cta-liquid">MOONLIGHT LINKS</div>
+
+        <div class="card-grid" id="cardGrid">
+            <!-- YouTube (no image) -->
+            <a href="https://youtube.com/@moonlight_kunnn?si=AYiAX4ARjEhpM9KN" class="liquid-card" target="_blank" data-link-id="youtube">
+                <div class="card-icon"><i class="fab fa-youtube"></i></div>
+                <div class="card-info">
+                    <h3>YouTube</h3>
+                    <p>edits & tutorials <i class="fa-regular fa-circle-play"></i></p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter" id="click-youtube">
+                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                </div>
+            </a>
+            
+            <!-- Telegram WITH IMAGE -->
+            <a href="https://t.me/editing_haven" class="liquid-card has-image" target="_blank" data-link-id="telegram">
+                <div class="card-icon">
+                    <img src="images/highupload.jpg" alt="" onerror="this.style.display='none'">
+                </div>
+                <div class="card-info">
+                    <h3>Telegram</h3>
+                    <p>updates & editing class</p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter" id="click-telegram">
+                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                </div>
+            </a>
+            
+            <!-- Instagram (no image) -->
+            <a href="https://www.instagram.com/moonl1ght_kun?igsh=MTB3YmQxN2liMTN4bw==" class="liquid-card" target="_blank" data-link-id="instagram">
+                <div class="card-icon"><i class="fab fa-instagram"></i></div>
+                <div class="card-info">
+                    <h3>Instagram</h3>
+                    <p>get in touch</p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter" id="click-instagram">
+                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                </div>
+            </a>
+            
+            <!-- TikTok 1 WITH IMAGE -->
+            <a href="https://www.tiktok.com/@moonlight_kunn" class="liquid-card has-image" target="_blank" data-link-id="tiktok1">
+                <div class="card-icon">
+                    <img src="images/mainpfp.jpg" alt="" onerror="this.style.display='none'">
+                </div>
+                <div class="card-info">
+                    <h3>TikTok 1</h3>
+                    <p>anime edits & relatable edits</p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter" id="click-tiktok1">
+                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                </div>
+            </a>
+
+            <!-- TikTok 2 (girls edit) WITH IMAGE -->
+            <a href="https://www.tiktok.com/@moonlight.sann?_r=1&_t=ZT-94ZsEuzH19K" class="liquid-card has-image" target="_blank" data-link-id="tiktok2">
+                <div class="card-icon">
+                    <img src="images/dmme.jpg" alt="" onerror="this.style.display='none'">
+                </div>
+                <div class="card-info">
+                    <h3>TikTok 2</h3>
+                    <p>girls edit</p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter" id="click-tiktok2">
+                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                </div>
+            </a>
+
+            <!-- High Quality Upload methods WITH IMAGE -->
+            <a href="https://t.me/editing_haven/1053" class="liquid-card has-image" target="_blank" data-link-id="highquality">
+                <div class="card-icon">
+                    <img src="images/highupload.jpg" alt="" onerror="this.style.display='none'">
+                    
+                </div>
+                <div class="card-info">
+                    <h3>High Quality methods</h3>
+                    <p>High Quality Upload methods <i class="fa-regular fa-star"></i></p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter" id="click-highquality">
+                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                </div>
+            </a>
+
+            <!-- AE CC / CapCut CC WITH IMAGE -->
+            <a href="https://t.me/MOONLIGHT_KUN" class="liquid-card has-image" target="_blank" data-link-id="aecc">
+                <div class="card-icon">
+                    <img src="images/dmme.jpg" alt="" onerror="this.style.display='none'">
+                    
+                </div>
+                <div class="card-info">
+                    <h3>Ae CC / CapCut CC</h3>
+                    <p>Dm to get my capcut cc for free</p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter" id="click-aecc">
+                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="liquid-footer">
+            <p class="made-by">🌊 MADE BY <a href="https://www.tiktok.com/@moonlight_kunn">MOONLIGHT</a></p>
+            <p class="contact-dev" style="margin-top: 0.6rem;">Contact dev if you want a link page like this: <a href="https://t.me/ECLIPSIATECHS_BOT">Telegram</a></p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION - YOUR CONFIG
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvHFeYu7ep4zxcmc1eP-HPWR9R0egIerQ",
+            authDomain: "moonlight-links-b92cc.firebaseapp.com",
+            projectId: "moonlight-links-b92cc",
+            storageBucket: "moonlight-links-b92cc.firebasestorage.app",
+            messagingSenderId: "580748458995",
+            appId: "1:580748458995:web:a3c06d4ee3a248a0533086",
+            measurementId: "G-08Q1NSNBNT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ============================================
+        // CLICK COUNTER LOGIC (tracks clicks, not views)
+        // ============================================
+        
+        // Format numbers (e.g., 1200 -> 1.2K)
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Update all counters on the page
+        async function updateAllCounters() {
+            try {
+                // Get global clicks
+                const globalDoc = await db.collection('clicks').doc('global').get();
+                if (globalDoc.exists) {
+                    const globalData = globalDoc.data();
+                    document.getElementById('globalClickCount').textContent = formatNumber(globalData.count || 0);
+                }
+                
+                // Get all link clicks
+                const linksDoc = await db.collection('clicks').doc('links').get();
+                if (linksDoc.exists) {
+                    const linksData = linksDoc.data();
+                    
+                    // Update each link counter
+                    document.querySelectorAll('.liquid-card').forEach(card => {
+                        const linkId = card.dataset.linkId;
+                        if (linkId && linksData[linkId]) {
+                            const counterSpan = card.querySelector('.card-click-counter .click-count');
+                            if (counterSpan) {
+                                counterSpan.textContent = formatNumber(linksData[linkId]);
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error updating counters:", error);
+            }
+        }
+
+        // Track a click on a specific link
+        async function trackClick(linkId) {
+            try {
+                // Use a transaction to safely increment both global and link-specific counts
+                await db.runTransaction(async (transaction) => {
+                    // Update global counter
+                    const globalRef = db.collection('clicks').doc('global');
+                    const globalDoc = await transaction.get(globalRef);
+                    
+                    if (!globalDoc.exists) {
+                        transaction.set(globalRef, { count: 1 });
+                    } else {
+                        const newGlobalCount = (globalDoc.data().count || 0) + 1;
+                        transaction.update(globalRef, { count: newGlobalCount });
+                    }
+                    
+                    // Update link-specific counter
+                    const linksRef = db.collection('clicks').doc('links');
+                    const linksDoc = await transaction.get(linksRef);
+                    
+                    if (!linksDoc.exists) {
+                        // Initialize with all links at 0, then set this one to 1
+                        const initialData = {
+                            youtube: 0,
+                            telegram: 0,
+                            instagram: 0,
+                            tiktok1: 0,
+                            tiktok2: 0,
+                            highquality: 0,
+                            aecc: 0,
+                            [linkId]: 1
+                        };
+                        transaction.set(linksRef, initialData);
+                    } else {
+                        const currentData = linksDoc.data();
+                        const newCount = (currentData[linkId] || 0) + 1;
+                        transaction.update(linksRef, { [linkId]: newCount });
+                    }
+                });
+                
+                // Update all counters on the page to show new values
+                await updateAllCounters();
+                
+            } catch (error) {
+                console.error("Error tracking click:", error);
+            }
+        }
+
+        // Add click event listeners to all cards
+        function setupClickTracking() {
+            document.querySelectorAll('.liquid-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't prevent default - we want the link to open
+                    const linkId = this.dataset.linkId;
+                    if (linkId) {
+                        // Track the click in Firebase
+                        trackClick(linkId);
+                    }
+                });
+            });
+        }
+
+        // ============================================
+        // LOADER
+        // ============================================
+        (function() {
+            const loader = document.getElementById('liquid-loader');
+            const loaderDuration = 7000; // 7 seconds
+
+            function removeLoader() {
+                if (loader && !loader.classList.contains('loaded')) {
+                    loader.classList.add('loaded');
+                }
+            }
+
+            setTimeout(removeLoader, loaderDuration);
+            window.addEventListener('load', function() {
+                // Ensure loader is removed after page load
+                setTimeout(removeLoader, 500);
+            });
+        })();
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update all counters first
+            updateAllCounters();
+            // Setup click tracking
+            setupClickTracking();
+        });
+    </script>
+    <!-- Note: The yellow warning for -webkit-backface-visibility is normal -->
+</body>
+</html>
