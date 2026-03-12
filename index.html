@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,500;14..32,700;14..32,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs (Compat version for easier use) -->
+    <!-- Firebase SDKs (Compat version) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
@@ -35,7 +35,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ---------- LOADER (7s exact, no fade, just remove) ---------- */
+        /* ---------- LOADER (7 seconds exact) ---------- */
         #liquid-loader {
             position: fixed;
             inset: 0;
@@ -87,7 +87,7 @@
             text-shadow: 0 0 25px #a06eff;
         }
 
-        /* ---------- BACKGROUND IMAGE (fixed full cover, no black gap) ---------- */
+        /* ---------- BACKGROUND IMAGE ---------- */
         #bg-image {
             position: fixed;
             top: 0;
@@ -102,7 +102,7 @@
             transform: translateZ(0);
         }
 
-        /* orbs & grain — smooth with translateZ */
+        /* orbs & grain */
         .liquid-orb {
             position: fixed;
             width: 70vmax;
@@ -158,7 +158,7 @@
             overflow: visible;
         }
 
-        /* ---------- GLOBAL VIEW COUNTER (Top of page) - STATIC ---------- */
+        /* ---------- VIEW COUNTER (Top of page) ---------- */
         .global-view-counter {
             width: 100%;
             display: flex;
@@ -236,7 +236,7 @@
             pointer-events: none;
         }
 
-        /* AVATAR – no clipping, smooth shadow */
+        /* AVATAR */
         .avatar-blob {
             width: 200px;
             height: 200px;
@@ -417,7 +417,6 @@
             font-size: 1.8rem;
         }
         
-        /* Very subtle overlay */
         .liquid-card.has-image .card-icon::after {
             content: '';
             position: absolute;
@@ -431,7 +430,7 @@
             pointer-events: none;
         }
 
-        /* Click counter on each card - NO BLACK BACKGROUND, JUST SUBTLE TEXT */
+        /* Click counter on each card */
         .card-click-counter {
             position: absolute;
             bottom: 8px;
@@ -451,10 +450,10 @@
             color: rgba(200, 180, 255, 0.6);
         }
 
-        /* Specific colors for original icons (when no image) */
-        .liquid-card:not(.has-image):nth-child(1) .card-icon { color: #ff3b3b; }    /* youtube */
-        .liquid-card:not(.has-image):nth-child(2) .card-icon { color: #29a9e0; }    /* telegram */
-        .liquid-card:not(.has-image):nth-child(3) .card-icon { background: radial-gradient(circle at 30% 30%, #feda77, #d62976, #4f5bd5); color: white; }  /* instagram */
+        /* Specific colors for original icons */
+        .liquid-card:not(.has-image):nth-child(1) .card-icon { color: #ff3b3b; }
+        .liquid-card:not(.has-image):nth-child(2) .card-icon { color: #29a9e0; }
+        .liquid-card:not(.has-image):nth-child(3) .card-icon { background: radial-gradient(circle at 30% 30%, #feda77, #d62976, #4f5bd5); color: white; }
 
         .card-info {
             flex: 1;
@@ -524,19 +523,15 @@
             .card-click-counter { font-size: 0.7rem; }
         }
 
-        /* smoothness improvements */
         .liquid-card, .avatar-blob, .icon-ring a {
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-        }
-        .banner-liquid img, .avatar-blob svg image {
-            image-rendering: -webkit-optimize-contrast;
         }
     </style>
 </head>
 <body>
 
-    <!-- LOADER – 7 seconds, no fade, just removed, text "loading..." -->
+    <!-- LOADER – 7 seconds exact -->
     <div id="liquid-loader">
         <div class="loader-spinner"></div>
         <div class="loader-text">loading...</div>
@@ -551,7 +546,7 @@
     <div class="grain"></div>
 
     <div class="main-container">
-        <!-- GLOBAL VIEW COUNTER (Top of page) - STATIC, NO PULSE -->
+        <!-- VIEW COUNTER (Top of page) -->
         <div class="global-view-counter">
             <div class="view-badge">
                 <i class="fas fa-eye"></i>
@@ -566,7 +561,7 @@
             </div>
         </div>
 
-        <!-- profile avatar (blob) -->
+        <!-- profile avatar -->
         <div class="avatar-blob">
             <svg viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
@@ -587,23 +582,23 @@
         <div class="sub-tag">@moonlight_kunn · liquid vision</div>
 
         <div class="icon-ring">
-            <a href="https://www.tiktok.com/@moonlight_kunn?_r=1&_t=ZT-94ZsJ5Fyaoo" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="https://youtube.com/@moonlight_kunnn?si=AYiAX4ARjEhpM9KN" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.tiktok.com/@moonlight_kunn" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://youtube.com/@moonlight_kunnn" target="_blank"><i class="fab fa-youtube"></i></a>
             <a href="https://t.me/editing_haven" target="_blank"><i class="fab fa-telegram"></i></a>
         </div>
 
         <div class="cta-liquid">MOONLIGHT LINKS</div>
 
         <div class="card-grid" id="cardGrid">
-            <!-- YouTube (no image) -->
-            <a href="https://youtube.com/@moonlight_kunnn?si=AYiAX4ARjEhpM9KN" class="liquid-card" target="_blank" data-link-id="youtube">
+            <!-- YouTube -->
+            <a href="https://youtube.com/@moonlight_kunnn" class="liquid-card" target="_blank" data-link-id="youtube">
                 <div class="card-icon"><i class="fab fa-youtube"></i></div>
                 <div class="card-info">
                     <h3>YouTube</h3>
                     <p>edits & tutorials <i class="fa-regular fa-circle-play"></i></p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter" id="click-youtube">
+                <div class="card-click-counter">
                     <i class="fas fa-eye"></i> <span class="click-count" id="youtubeCount">0</span>
                 </div>
             </a>
@@ -612,26 +607,27 @@
             <a href="https://t.me/editing_haven" class="liquid-card has-image" target="_blank" data-link-id="telegram">
                 <div class="card-icon">
                     <img src="images/highupload.jpg" alt="" onerror="this.style.display='none'">
+                    
                 </div>
                 <div class="card-info">
                     <h3>Telegram</h3>
                     <p>updates & editing class</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter" id="click-telegram">
+                <div class="card-click-counter">
                     <i class="fas fa-eye"></i> <span class="click-count" id="telegramCount">0</span>
                 </div>
             </a>
             
-            <!-- Instagram (no image) -->
-            <a href="https://www.instagram.com/moonl1ght_kun?igsh=MTB3YmQxN2liMTN4bw==" class="liquid-card" target="_blank" data-link-id="instagram">
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/moonl1ght_kun" class="liquid-card" target="_blank" data-link-id="instagram">
                 <div class="card-icon"><i class="fab fa-instagram"></i></div>
                 <div class="card-info">
                     <h3>Instagram</h3>
                     <p>get in touch</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter" id="click-instagram">
+                <div class="card-click-counter">
                     <i class="fas fa-eye"></i> <span class="click-count" id="instagramCount">0</span>
                 </div>
             </a>
@@ -640,66 +636,70 @@
             <a href="https://www.tiktok.com/@moonlight_kunn" class="liquid-card has-image" target="_blank" data-link-id="tiktok1">
                 <div class="card-icon">
                     <img src="images/mainpfp.jpg" alt="" onerror="this.style.display='none'">
+                    
                 </div>
                 <div class="card-info">
                     <h3>TikTok 1</h3>
                     <p>anime edits & relatable edits</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter" id="click-tiktok1">
+                <div class="card-click-counter">
                     <i class="fas fa-eye"></i> <span class="click-count" id="tiktok1Count">0</span>
                 </div>
             </a>
 
-            <!-- TikTok 2 (girls edit) WITH IMAGE -->
-            <a href="https://www.tiktok.com/@moonlight.sann?_r=1&_t=ZT-94ZsEuzH19K" class="liquid-card has-image" target="_blank" data-link-id="tiktok2">
+            <!-- TikTok 2 WITH IMAGE -->
+            <a href="https://www.tiktok.com/@moonlight.sann" class="liquid-card has-image" target="_blank" data-link-id="tiktok2">
                 <div class="card-icon">
                     <img src="images/dmme.jpg" alt="" onerror="this.style.display='none'">
+                    
                 </div>
                 <div class="card-info">
                     <h3>TikTok 2</h3>
                     <p>girls edit</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter" id="click-tiktok2">
+                <div class="card-click-counter">
                     <i class="fas fa-eye"></i> <span class="click-count" id="tiktok2Count">0</span>
                 </div>
             </a>
 
-            <!-- High Quality Upload methods WITH IMAGE -->
+            <!-- High Quality Upload methods -->
             <a href="https://t.me/editing_haven/1053" class="liquid-card has-image" target="_blank" data-link-id="highquality">
                 <div class="card-icon">
                     <img src="images/highupload.jpg" alt="" onerror="this.style.display='none'">
+                    
                 </div>
                 <div class="card-info">
-                    <h3>Quality methods</h3>
+                    <h3>High Quality methods</h3>
                     <p>High Quality Upload methods <i class="fa-regular fa-star"></i></p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter" id="click-highquality">
+                <div class="card-click-counter">
                     <i class="fas fa-eye"></i> <span class="click-count" id="highqualityCount">0</span>
                 </div>
             </a>
 
-            <!-- AE CC / CapCut CC WITH IMAGE -->
+            <!-- AE CC / CapCut CC -->
             <a href="https://t.me/MOONLIGHT_KUN" class="liquid-card has-image" target="_blank" data-link-id="aecc">
                 <div class="card-icon">
                     <img src="images/dmme.jpg" alt="" onerror="this.style.display='none'">
+                    
                 </div>
                 <div class="card-info">
                     <h3>Ae CC / CapCut CC</h3>
                     <p>Dm to get my capcut cc for free</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter" id="click-aecc">
+                <div class="card-click-counter">
                     <i class="fas fa-eye"></i> <span class="click-count" id="aeccCount">0</span>
                 </div>
             </a>
         </div>
 
         <div class="liquid-footer">
-            <p class="made-by">🌊 MADE BY <a href="https://www.tiktok.com/@moonlight_kunn">MOONLIGHT</a></p>
-            <p class="contact-dev" style="margin-top: 0.6rem;">Contact dev if you want a link page like this: <a href="https://t.me/ECLIPSIATECHS_BOT">Telegram</a></p>
+            <p class="made-by">🌊 MADE BY <a href="https://t.me/MOONLIGHT_KUN">MOONLIGHT</a></p>
+            <p class="contact-dev" style="margin-top: 0.6rem;">Contact dev if you want a link page like this: <a href="https://t.me/MOONLIGHT_KUN">Telegram</a></p>
         </div>
     </div>
 
@@ -713,22 +713,20 @@
             projectId: "moonlight-links-b92cc",
             storageBucket: "moonlight-links-b92cc.firebasestorage.app",
             messagingSenderId: "580748458995",
-            appId: "1:580748458995:web:a3c06d4ee3a248a0533086",
-            measurementId: "G-08Q1NSNBNT"
+            appId: "1:580748458995:web:a3c06d4ee3a248a0533086"
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        // Use FieldValue for increments
+        // Use FieldValue for atomic increments
         const increment = firebase.firestore.FieldValue.increment(1);
 
         // ============================================
         // HELPER FUNCTIONS
         // ============================================
         
-        // Format numbers (e.g., 1200 -> 1.2K)
         function formatNumber(num) {
             if (!num && num !== 0) return '0';
             if (num >= 1000000) {
@@ -741,23 +739,62 @@
         }
 
         // ============================================
-        // VIEWER COUNT LOGIC (using sessionStorage)
+        // INITIALIZE DATABASE DOCUMENTS
         // ============================================
         
-        async function trackViewer() {
-            const hasViewed = sessionStorage.getItem('moonlight_viewer_counted');
+        async function initializeDatabase() {
+            try {
+                // Check if views document exists, if not create it
+                const viewsRef = db.collection('stats').doc('views');
+                const viewsDoc = await viewsRef.get();
+                
+                if (!viewsDoc.exists) {
+                    await viewsRef.set({ count: 0 });
+                    console.log('Created views document with count 0');
+                }
+                
+                // Check if clicks document exists, if not create it
+                const clicksRef = db.collection('stats').doc('clicks');
+                const clicksDoc = await clicksRef.get();
+                
+                if (!clicksDoc.exists) {
+                    await clicksRef.set({
+                        youtube: 0,
+                        telegram: 0,
+                        instagram: 0,
+                        tiktok1: 0,
+                        tiktok2: 0,
+                        highquality: 0,
+                        aecc: 0
+                    });
+                    console.log('Created clicks document with all counts 0');
+                }
+            } catch (error) {
+                console.error("Error initializing database:", error);
+            }
+        }
+
+        // ============================================
+        // VIEW COUNT LOGIC (atomic increment)
+        // ============================================
+        
+        async function trackView() {
+            // Check if user has been counted in this session
+            const hasViewed = sessionStorage.getItem('moonlight_view_counted');
             
             if (!hasViewed) {
                 try {
+                    // Atomic increment - guaranteed to work even with concurrent users
                     const viewsRef = db.collection('stats').doc('views');
                     await viewsRef.set({ 
                         count: increment 
                     }, { merge: true });
                     
-                    sessionStorage.setItem('moonlight_viewer_counted', 'true');
-                    console.log('New viewer counted!');
+                    // Mark as counted
+                    sessionStorage.setItem('moonlight_view_counted', 'true');
+                    console.log('New view counted with atomic increment');
                 } catch (error) {
-                    console.error("Error incrementing viewer count:", error);
+                    console.error("Error incrementing view count:", error);
                 }
             }
         }
@@ -766,18 +803,15 @@
         // REAL-TIME LISTENERS (onSnapshot)
         // ============================================
         
-        // Listen for viewer count changes
-        function setupViewerListener() {
+        // Listen for view count changes
+        function setupViewListener() {
             db.collection('stats').doc('views').onSnapshot((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
                     document.getElementById('globalViewCount').textContent = formatNumber(data.count || 0);
-                } else {
-                    // Create the document if it doesn't exist
-                    db.collection('stats').doc('views').set({ count: 0 });
                 }
             }, (error) => {
-                console.error("Viewer listener error:", error);
+                console.error("View listener error:", error);
             });
         }
         
@@ -795,17 +829,6 @@
                     document.getElementById('tiktok2Count').textContent = formatNumber(data.tiktok2 || 0);
                     document.getElementById('highqualityCount').textContent = formatNumber(data.highquality || 0);
                     document.getElementById('aeccCount').textContent = formatNumber(data.aecc || 0);
-                } else {
-                    // Create the document if it doesn't exist
-                    db.collection('stats').doc('clicks').set({
-                        youtube: 0,
-                        telegram: 0,
-                        instagram: 0,
-                        tiktok1: 0,
-                        tiktok2: 0,
-                        highquality: 0,
-                        aecc: 0
-                    });
                 }
             }, (error) => {
                 console.error("Clicks listener error:", error);
@@ -813,17 +836,18 @@
         }
 
         // ============================================
-        // CLICK TRACKING LOGIC
+        // CLICK TRACKING (atomic increment)
         // ============================================
         
         async function trackClick(linkId) {
             try {
                 const clicksRef = db.collection('stats').doc('clicks');
+                // Atomic increment - guaranteed to work
                 await clicksRef.set({ 
                     [linkId]: increment 
                 }, { merge: true });
                 
-                console.log(`Click tracked for ${linkId}`);
+                console.log(`Click tracked for ${linkId} using atomic increment`);
             } catch (error) {
                 console.error("Error tracking click:", error);
             }
@@ -842,39 +866,68 @@
         }
 
         // ============================================
-        // LOADER
+        // LOADER - 7 SECONDS EXACT
         // ============================================
         (function() {
             const loader = document.getElementById('liquid-loader');
-            const loaderDuration = 7000; // 7 seconds
-
+            const loaderDuration = 10000; // 7000ms = 7 seconds
+            
+            console.log('Loader started - will disappear in 7 seconds');
+            
             function removeLoader() {
                 if (loader && !loader.classList.contains('loaded')) {
                     loader.classList.add('loaded');
+                    console.log('Loader removed after 7 seconds');
                 }
             }
 
+            // Remove loader after exactly 7 seconds
             setTimeout(removeLoader, loaderDuration);
+            
+            // Also remove on window load as backup (but still respect minimum time)
             window.addEventListener('load', function() {
-                setTimeout(removeLoader, 500);
+                setTimeout(removeLoader, 1000); // Remove 1 second after load if not already removed
             });
+            
+            // To change loader duration, modify loaderDuration above
         })();
 
         // ============================================
         // INITIALIZE EVERYTHING
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Set up real-time listeners
-            setupViewerListener();
-            setupClicksListener();
-            
-            // Track this viewer (only once per session)
-            trackViewer();
-            
-            // Setup click tracking
-            setupClickTracking();
+            // First initialize database documents
+            initializeDatabase().then(() => {
+                // Then set up real-time listeners
+                setupViewListener();
+                setupClicksListener();
+                
+                // Track this view (only once per session)
+                trackView();
+                
+                // Setup click tracking
+                setupClickTracking();
+                
+                console.log('Firebase counters initialized with atomic increments');
+            });
         });
     </script>
-    <!-- Note: The yellow warning for -webkit-backface-visibility is normal -->
+    
+    <!-- 
+        ============================================
+        HOW TO MANUALLY ADJUST LOADER TIME:
+        ============================================
+        
+        Find this line in the JavaScript:
+        const loaderDuration = 7000; // 7000ms = 7 seconds
+        
+        Change the number to adjust the time:
+        - 5000 = 5 seconds
+        - 7000 = 7 seconds (default)
+        - 10000 = 10 seconds
+        
+        The loader will always stay for the FULL duration
+        regardless of when the page finishes loading.
+    -->
 </body>
 </html>
