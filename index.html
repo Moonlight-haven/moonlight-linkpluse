@@ -158,8 +158,8 @@
             overflow: visible;
         }
 
-        /* ---------- GLOBAL CLICK COUNTER (Top of page) - NO PULSE, STATIC ---------- */
-        .global-click-counter {
+        /* ---------- GLOBAL VIEW COUNTER (Top of page) - STATIC ---------- */
+        .global-view-counter {
             width: 100%;
             display: flex;
             justify-content: flex-end;
@@ -168,7 +168,7 @@
             z-index: 30;
         }
         
-        .click-badge {
+        .view-badge {
             background: rgba(22, 18, 30, 0.7);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(230, 200, 255, 0.25);
@@ -183,13 +183,12 @@
             color: #f0eaff;
         }
         
-        .click-badge i {
+        .view-badge i {
             font-size: 1.3rem;
             color: #ccb5ff;
-            /* NO ANIMATION - static */
         }
         
-        .click-count-number {
+        .view-count-number {
             font-weight: 700;
             background: linear-gradient(135deg, #fff, #e4daff);
             -webkit-background-clip: text;
@@ -552,12 +551,12 @@
     <div class="grain"></div>
 
     <div class="main-container">
-        <!-- GLOBAL CLICK COUNTER (Top of page) - STATIC, NO PULSE -->
-        <div class="global-click-counter">
-            <div class="click-badge">
+        <!-- GLOBAL VIEW COUNTER (Top of page) - STATIC, NO PULSE -->
+        <div class="global-view-counter">
+            <div class="view-badge">
                 <i class="fas fa-eye"></i>
-                <span class="click-count-number" id="globalClickCount">0</span>
-                <span>Total Clicks</span>
+                <span class="view-count-number" id="globalViewCount">0</span>
+                <span>Total Views</span>
             </div>
         </div>
         
@@ -605,7 +604,7 @@
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="card-click-counter" id="click-youtube">
-                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                    <i class="fas fa-eye"></i> <span class="click-count" id="youtubeCount">0</span>
                 </div>
             </a>
             
@@ -620,7 +619,7 @@
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="card-click-counter" id="click-telegram">
-                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                    <i class="fas fa-eye"></i> <span class="click-count" id="telegramCount">0</span>
                 </div>
             </a>
             
@@ -633,7 +632,7 @@
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="card-click-counter" id="click-instagram">
-                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                    <i class="fas fa-eye"></i> <span class="click-count" id="instagramCount">0</span>
                 </div>
             </a>
             
@@ -648,7 +647,7 @@
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="card-click-counter" id="click-tiktok1">
-                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                    <i class="fas fa-eye"></i> <span class="click-count" id="tiktok1Count">0</span>
                 </div>
             </a>
 
@@ -663,7 +662,7 @@
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="card-click-counter" id="click-tiktok2">
-                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                    <i class="fas fa-eye"></i> <span class="click-count" id="tiktok2Count">0</span>
                 </div>
             </a>
 
@@ -671,15 +670,14 @@
             <a href="https://t.me/editing_haven/1053" class="liquid-card has-image" target="_blank" data-link-id="highquality">
                 <div class="card-icon">
                     <img src="images/highupload.jpg" alt="" onerror="this.style.display='none'">
-                    
                 </div>
                 <div class="card-info">
-                    <h3>High Quality methods</h3>
+                    <h3>Quality methods</h3>
                     <p>High Quality Upload methods <i class="fa-regular fa-star"></i></p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="card-click-counter" id="click-highquality">
-                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                    <i class="fas fa-eye"></i> <span class="click-count" id="highqualityCount">0</span>
                 </div>
             </a>
 
@@ -687,7 +685,6 @@
             <a href="https://t.me/MOONLIGHT_KUN" class="liquid-card has-image" target="_blank" data-link-id="aecc">
                 <div class="card-icon">
                     <img src="images/dmme.jpg" alt="" onerror="this.style.display='none'">
-                    
                 </div>
                 <div class="card-info">
                     <h3>Ae CC / CapCut CC</h3>
@@ -695,7 +692,7 @@
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="card-click-counter" id="click-aecc">
-                    <i class="fas fa-eye"></i> <span class="click-count">0</span>
+                    <i class="fas fa-eye"></i> <span class="click-count" id="aeccCount">0</span>
                 </div>
             </a>
         </div>
@@ -708,7 +705,7 @@
 
     <script>
         // ============================================
-        // FIREBASE CONFIGURATION - YOUR CONFIG
+        // FIREBASE CONFIGURATION
         // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyDvHFeYu7ep4zxcmc1eP-HPWR9R0egIerQ",
@@ -723,13 +720,17 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        
+        // Use FieldValue for increments
+        const increment = firebase.firestore.FieldValue.increment(1);
 
         // ============================================
-        // CLICK COUNTER LOGIC (tracks clicks, not views)
+        // HELPER FUNCTIONS
         // ============================================
         
         // Format numbers (e.g., 1200 -> 1.2K)
         function formatNumber(num) {
+            if (!num && num !== 0) return '0';
             if (num >= 1000000) {
                 return (num / 1000000).toFixed(1) + 'M';
             }
@@ -739,80 +740,90 @@
             return num.toString();
         }
 
-        // Update all counters on the page
-        async function updateAllCounters() {
-            try {
-                // Get global clicks
-                const globalDoc = await db.collection('clicks').doc('global').get();
-                if (globalDoc.exists) {
-                    const globalData = globalDoc.data();
-                    document.getElementById('globalClickCount').textContent = formatNumber(globalData.count || 0);
-                }
-                
-                // Get all link clicks
-                const linksDoc = await db.collection('clicks').doc('links').get();
-                if (linksDoc.exists) {
-                    const linksData = linksDoc.data();
+        // ============================================
+        // VIEWER COUNT LOGIC (using sessionStorage)
+        // ============================================
+        
+        async function trackViewer() {
+            const hasViewed = sessionStorage.getItem('moonlight_viewer_counted');
+            
+            if (!hasViewed) {
+                try {
+                    const viewsRef = db.collection('stats').doc('views');
+                    await viewsRef.set({ 
+                        count: increment 
+                    }, { merge: true });
                     
-                    // Update each link counter
-                    document.querySelectorAll('.liquid-card').forEach(card => {
-                        const linkId = card.dataset.linkId;
-                        if (linkId && linksData[linkId]) {
-                            const counterSpan = card.querySelector('.card-click-counter .click-count');
-                            if (counterSpan) {
-                                counterSpan.textContent = formatNumber(linksData[linkId]);
-                            }
-                        }
-                    });
+                    sessionStorage.setItem('moonlight_viewer_counted', 'true');
+                    console.log('New viewer counted!');
+                } catch (error) {
+                    console.error("Error incrementing viewer count:", error);
                 }
-            } catch (error) {
-                console.error("Error updating counters:", error);
             }
         }
 
-        // Track a click on a specific link
+        // ============================================
+        // REAL-TIME LISTENERS (onSnapshot)
+        // ============================================
+        
+        // Listen for viewer count changes
+        function setupViewerListener() {
+            db.collection('stats').doc('views').onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('globalViewCount').textContent = formatNumber(data.count || 0);
+                } else {
+                    // Create the document if it doesn't exist
+                    db.collection('stats').doc('views').set({ count: 0 });
+                }
+            }, (error) => {
+                console.error("Viewer listener error:", error);
+            });
+        }
+        
+        // Listen for clicks data changes
+        function setupClicksListener() {
+            db.collection('stats').doc('clicks').onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    
+                    // Update each link counter
+                    document.getElementById('youtubeCount').textContent = formatNumber(data.youtube || 0);
+                    document.getElementById('telegramCount').textContent = formatNumber(data.telegram || 0);
+                    document.getElementById('instagramCount').textContent = formatNumber(data.instagram || 0);
+                    document.getElementById('tiktok1Count').textContent = formatNumber(data.tiktok1 || 0);
+                    document.getElementById('tiktok2Count').textContent = formatNumber(data.tiktok2 || 0);
+                    document.getElementById('highqualityCount').textContent = formatNumber(data.highquality || 0);
+                    document.getElementById('aeccCount').textContent = formatNumber(data.aecc || 0);
+                } else {
+                    // Create the document if it doesn't exist
+                    db.collection('stats').doc('clicks').set({
+                        youtube: 0,
+                        telegram: 0,
+                        instagram: 0,
+                        tiktok1: 0,
+                        tiktok2: 0,
+                        highquality: 0,
+                        aecc: 0
+                    });
+                }
+            }, (error) => {
+                console.error("Clicks listener error:", error);
+            });
+        }
+
+        // ============================================
+        // CLICK TRACKING LOGIC
+        // ============================================
+        
         async function trackClick(linkId) {
             try {
-                // Use a transaction to safely increment both global and link-specific counts
-                await db.runTransaction(async (transaction) => {
-                    // Update global counter
-                    const globalRef = db.collection('clicks').doc('global');
-                    const globalDoc = await transaction.get(globalRef);
-                    
-                    if (!globalDoc.exists) {
-                        transaction.set(globalRef, { count: 1 });
-                    } else {
-                        const newGlobalCount = (globalDoc.data().count || 0) + 1;
-                        transaction.update(globalRef, { count: newGlobalCount });
-                    }
-                    
-                    // Update link-specific counter
-                    const linksRef = db.collection('clicks').doc('links');
-                    const linksDoc = await transaction.get(linksRef);
-                    
-                    if (!linksDoc.exists) {
-                        // Initialize with all links at 0, then set this one to 1
-                        const initialData = {
-                            youtube: 0,
-                            telegram: 0,
-                            instagram: 0,
-                            tiktok1: 0,
-                            tiktok2: 0,
-                            highquality: 0,
-                            aecc: 0,
-                            [linkId]: 1
-                        };
-                        transaction.set(linksRef, initialData);
-                    } else {
-                        const currentData = linksDoc.data();
-                        const newCount = (currentData[linkId] || 0) + 1;
-                        transaction.update(linksRef, { [linkId]: newCount });
-                    }
-                });
+                const clicksRef = db.collection('stats').doc('clicks');
+                await clicksRef.set({ 
+                    [linkId]: increment 
+                }, { merge: true });
                 
-                // Update all counters on the page to show new values
-                await updateAllCounters();
-                
+                console.log(`Click tracked for ${linkId}`);
             } catch (error) {
                 console.error("Error tracking click:", error);
             }
@@ -822,10 +833,8 @@
         function setupClickTracking() {
             document.querySelectorAll('.liquid-card').forEach(card => {
                 card.addEventListener('click', function(e) {
-                    // Don't prevent default - we want the link to open
                     const linkId = this.dataset.linkId;
                     if (linkId) {
-                        // Track the click in Firebase
                         trackClick(linkId);
                     }
                 });
@@ -847,15 +856,21 @@
 
             setTimeout(removeLoader, loaderDuration);
             window.addEventListener('load', function() {
-                // Ensure loader is removed after page load
                 setTimeout(removeLoader, 500);
             });
         })();
 
-        // Initialize everything when page loads
+        // ============================================
+        // INITIALIZE EVERYTHING
+        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Update all counters first
-            updateAllCounters();
+            // Set up real-time listeners
+            setupViewerListener();
+            setupClicksListener();
+            
+            // Track this viewer (only once per session)
+            trackViewer();
+            
             // Setup click tracking
             setupClickTracking();
         });
