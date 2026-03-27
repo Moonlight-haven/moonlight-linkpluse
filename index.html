@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>moonlight · liquid links</title>
+    <title>moonlight · liquid links + editing pack</title>
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ---------- LOADER (7 seconds exact) ---------- */
+        /* LOADER (7 seconds exact) */
         #liquid-loader {
             position: fixed;
             inset: 0;
@@ -87,7 +87,7 @@
             text-shadow: 0 0 25px #a06eff;
         }
 
-        /* ---------- BACKGROUND IMAGE ---------- */
+        /* BACKGROUND IMAGE */
         #bg-image {
             position: fixed;
             top: 0;
@@ -124,8 +124,6 @@
             background: radial-gradient(circle at 70% 70%, #2a1b3a, #0b0712);
             filter: blur(120px);
             animation: liquidMove2 22s infinite alternate;
-            will-change: transform;
-            transform: translateZ(0);
         }
 
         @keyframes liquidMove {
@@ -158,7 +156,7 @@
             overflow: visible;
         }
 
-        /* ---------- VIEW COUNTER (Top of page) ---------- */
+        /* VIEW COUNTER (Top of page) */
         .global-view-counter {
             width: 100%;
             display: flex;
@@ -256,11 +254,6 @@
             filter: drop-shadow(0 4px 15px black);
         }
 
-        .avatar-blob:hover {
-            transform: none;
-            filter: drop-shadow(0 18px 40px rgba(140, 70, 255, 0.9));
-        }
-
         .profile-name {
             font-size: 4rem;
             font-weight: 900;
@@ -305,20 +298,12 @@
             color: white;
             border: 2px solid rgba(255, 220, 255, 0.2);
             box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.7);
-            transition: none;
             text-decoration: none;
         }
 
         .icon-ring a:nth-child(1) { color: #ffffff; }
         .icon-ring a:nth-child(2) { color: #ff8a80; }
         .icon-ring a:nth-child(3) { color: #29a9e0; }
-
-        .icon-ring a:hover {
-            border-radius: 40% 60% 70% 30% / 50% 40% 60% 50%;
-            background: rgba(40, 30, 55, 0.7);
-            border-color: rgba(255, 220, 255, 0.2);
-            transform: none;
-        }
 
         .cta-liquid {
             font-size: 1.8rem;
@@ -362,14 +347,6 @@
             position: relative;
         }
 
-        .liquid-card:hover {
-            border-radius: 80px 20px 20px 80px;
-            background: rgba(22, 18, 30, 0.6);
-            border-color: rgba(230, 200, 255, 0.15);
-            box-shadow: 0 20px 40px -15px black, 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-            transform: none;
-        }
-
         .card-icon {
             width: 70px;
             height: 70px;
@@ -388,7 +365,7 @@
             overflow: hidden;
         }
 
-        /* Style for cards with images */
+        /* cards with images */
         .liquid-card.has-image .card-icon {
             background: #1b1428;
             padding: 0;
@@ -403,14 +380,13 @@
             top: 0;
             left: 0;
             opacity: 1;
-            filter: none;
             z-index: 1;
         }
         
         .liquid-card.has-image .card-icon i {
             position: relative;
             z-index: 3;
-            text-shadow: 0 0 15px black, 0 0 30px rgba(0,0,0,0.5);
+            text-shadow: 0 0 15px black;
             background: rgba(0,0,0,0.2);
             padding: 8px;
             border-radius: 50%;
@@ -430,7 +406,7 @@
             pointer-events: none;
         }
 
-        /* Click counter on each card */
+        /* click counter on each card */
         .card-click-counter {
             position: absolute;
             bottom: 8px;
@@ -439,7 +415,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            color: rgba(180, 170, 210, 0.7);
+            color: rgba(180, 170, 210, 0.8);
             z-index: 5;
             pointer-events: none;
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
@@ -447,13 +423,8 @@
         
         .card-click-counter i {
             font-size: 0.75rem;
-            color: rgba(200, 180, 255, 0.6);
+            color: rgba(200, 180, 255, 0.7);
         }
-
-        /* Specific colors for original icons */
-        .liquid-card:not(.has-image):nth-child(1) .card-icon { color: #ff3b3b; }
-        .liquid-card:not(.has-image):nth-child(2) .card-icon { color: #29a9e0; }
-        .liquid-card:not(.has-image):nth-child(3) .card-icon { background: radial-gradient(circle at 30% 30%, #feda77, #d62976, #4f5bd5); color: white; }
 
         .card-info {
             flex: 1;
@@ -481,13 +452,7 @@
             font-size: 1.8rem;
             color: #ccb5ff;
             opacity: 0.7;
-            transition: none;
             margin-left: 0.2rem;
-        }
-
-        .liquid-card:hover .card-arrow {
-            transform: none;
-            opacity: 0.7;
         }
 
         .liquid-footer {
@@ -509,11 +474,6 @@
             border-bottom: 2px dotted rgba(210, 170, 250, 0.6);
         }
 
-        .liquid-footer a:hover {
-            color: white;
-            border-bottom: 2px solid #c89eff;
-        }
-
         @media (max-width: 650px) {
             .profile-name { font-size: 2.8rem; }
             .avatar-blob { width: 160px; height: 160px; margin-top: -80px; }
@@ -522,16 +482,11 @@
             .card-icon { width: 60px; height: 60px; font-size: 1.9rem; }
             .card-click-counter { font-size: 0.7rem; }
         }
-
-        .liquid-card, .avatar-blob, .icon-ring a {
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
     </style>
 </head>
 <body>
 
-    <!-- LOADER – 7 seconds exact -->
+    <!-- LOADER – 7 seconds -->
     <div id="liquid-loader">
         <div class="loader-spinner"></div>
         <div class="loader-text">loading...</div>
@@ -546,7 +501,7 @@
     <div class="grain"></div>
 
     <div class="main-container">
-        <!-- VIEW COUNTER (Top of page) -->
+        <!-- VIEW COUNTER -->
         <div class="global-view-counter">
             <div class="view-badge">
                 <i class="fas fa-eye"></i>
@@ -561,7 +516,7 @@
             </div>
         </div>
 
-        <!-- profile avatar -->
+        <!-- avatar -->
         <div class="avatar-blob">
             <svg viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
@@ -598,25 +553,18 @@
                     <p>edits & tutorials <i class="fa-regular fa-circle-play"></i></p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter">
-                    <i class="fas fa-eye"></i> <span class="click-count" id="youtubeCount">0</span>
-                </div>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="youtubeCount">0</span></div>
             </a>
             
             <!-- Telegram WITH IMAGE -->
             <a href="https://t.me/editing_haven" class="liquid-card has-image" target="_blank" data-link-id="telegram">
-                <div class="card-icon">
-                    <img src="images/highupload.jpg" alt="" onerror="this.style.display='none'">
-                    
-                </div>
+                <div class="card-icon"><img src="images/highupload.jpg" alt="" onerror="this.style.display='none'"></div>
                 <div class="card-info">
                     <h3>Telegram</h3>
                     <p>updates & editing class</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter">
-                    <i class="fas fa-eye"></i> <span class="click-count" id="telegramCount">0</span>
-                </div>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="telegramCount">0</span></div>
             </a>
             
             <!-- Instagram -->
@@ -627,73 +575,65 @@
                     <p>get in touch</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter">
-                    <i class="fas fa-eye"></i> <span class="click-count" id="instagramCount">0</span>
-                </div>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="instagramCount">0</span></div>
             </a>
             
             <!-- TikTok 1 WITH IMAGE -->
             <a href="https://www.tiktok.com/@moonlight_kunn" class="liquid-card has-image" target="_blank" data-link-id="tiktok1">
-                <div class="card-icon">
-                    <img src="images/mainpfp.jpg" alt="" onerror="this.style.display='none'">
-                    
-                </div>
+                <div class="card-icon"><img src="images/mainpfp.jpg" alt="" onerror="this.style.display='none'"></div>
                 <div class="card-info">
                     <h3>TikTok 1</h3>
                     <p>anime edits & relatable edits</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter">
-                    <i class="fas fa-eye"></i> <span class="click-count" id="tiktok1Count">0</span>
-                </div>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="tiktok1Count">0</span></div>
             </a>
 
             <!-- TikTok 2 WITH IMAGE -->
             <a href="https://www.tiktok.com/@moonlight.sann" class="liquid-card has-image" target="_blank" data-link-id="tiktok2">
-                <div class="card-icon">
-                    <img src="images/dmme.jpg" alt="" onerror="this.style.display='none'">
-                    
-                </div>
+                <div class="card-icon"><img src="images/dmme.jpg" alt="" onerror="this.style.display='none'"></div>
                 <div class="card-info">
                     <h3>TikTok 2</h3>
                     <p>girls edit</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter">
-                    <i class="fas fa-eye"></i> <span class="click-count" id="tiktok2Count">0</span>
-                </div>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="tiktok2Count">0</span></div>
             </a>
 
             <!-- High Quality Upload methods -->
             <a href="https://t.me/editing_haven/1053" class="liquid-card has-image" target="_blank" data-link-id="highquality">
-                <div class="card-icon">
-                    <img src="images/highupload.jpg" alt="" onerror="this.style.display='none'">
-                    
-                </div>
+                <div class="card-icon"><img src="images/highupload.jpg" alt="" onerror="this.style.display='none'"></div>
                 <div class="card-info">
                     <h3>High Quality methods</h3>
                     <p>High Quality Upload methods <i class="fa-regular fa-star"></i></p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter">
-                    <i class="fas fa-eye"></i> <span class="click-count" id="highqualityCount">0</span>
-                </div>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="highqualityCount">0</span></div>
             </a>
 
             <!-- AE CC / CapCut CC -->
             <a href="https://t.me/MOONLIGHT_KUN" class="liquid-card has-image" target="_blank" data-link-id="aecc">
-                <div class="card-icon">
-                    <img src="images/dmme.jpg" alt="" onerror="this.style.display='none'">
-                    
-                </div>
+                <div class="card-icon"><img src="images/dmme.jpg" alt="" onerror="this.style.display='none'"></div>
                 <div class="card-info">
                     <h3>Ae CC / CapCut CC</h3>
                     <p>Dm to get my capcut cc for free</p>
                 </div>
                 <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="card-click-counter">
-                    <i class="fas fa-eye"></i> <span class="click-count" id="aeccCount">0</span>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="aeccCount">0</span></div>
+            </a>
+
+            <!-- ========== NEW: EDITING PACK LINK ========== -->
+            <a href="https://t.me/editing_haven/1126" class="liquid-card has-image" target="_blank" data-link-id="editingpack">
+                <div class="card-icon">
+                    <img src="images/editingpack_thumb.jpg" alt="editing pack" onerror="this.onerror=null; this.style.display='none'; this.parentElement.style.background='linear-gradient(145deg, #4a2b7a, #231b38)'">
+                    <i class="fas fa-layer-group" style="position: relative; z-index: 3; font-size: 2rem; background: rgba(0,0,0,0.4); border-radius: 40%; padding: 5px;"></i>
                 </div>
+                <div class="card-info">
+                    <h3>✨ EDITING PACK ✨</h3>
+                    <p>presets, transitions, cc <i class="fa-regular fa-gem"></i></p>
+                </div>
+                <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="card-click-counter"><i class="fas fa-eye"></i> <span class="click-count" id="editingpackCount">0</span></div>
             </a>
         </div>
 
@@ -704,9 +644,7 @@
     </div>
 
     <script>
-        // ============================================
-        // FIREBASE CONFIGURATION
-        // ============================================
+        // ========== FIREBASE CONFIG ==========
         const firebaseConfig = {
             apiKey: "AIzaSyDvHFeYu7ep4zxcmc1eP-HPWR9R0egIerQ",
             authDomain: "moonlight-links-b92cc.firebaseapp.com",
@@ -715,113 +653,63 @@
             messagingSenderId: "580748458995",
             appId: "1:580748458995:web:a3c06d4ee3a248a0533086"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        
-        // Use FieldValue for atomic increments
         const increment = firebase.firestore.FieldValue.increment(1);
 
-        // ============================================
-        // HELPER FUNCTIONS
-        // ============================================
-        
         function formatNumber(num) {
             if (!num && num !== 0) return '0';
-            if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            }
-            if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
-            }
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
             return num.toString();
         }
 
-        // ============================================
-        // INITIALIZE DATABASE DOCUMENTS
-        // ============================================
-        
+        // Initialize documents (including editingpack field)
         async function initializeDatabase() {
             try {
-                // Check if views document exists, if not create it
                 const viewsRef = db.collection('stats').doc('views');
                 const viewsDoc = await viewsRef.get();
+                if (!viewsDoc.exists) await viewsRef.set({ count: 0 });
                 
-                if (!viewsDoc.exists) {
-                    await viewsRef.set({ count: 0 });
-                    console.log('Created views document with count 0');
-                }
-                
-                // Check if clicks document exists, if not create it
                 const clicksRef = db.collection('stats').doc('clicks');
                 const clicksDoc = await clicksRef.get();
-                
                 if (!clicksDoc.exists) {
                     await clicksRef.set({
-                        youtube: 0,
-                        telegram: 0,
-                        instagram: 0,
-                        tiktok1: 0,
-                        tiktok2: 0,
-                        highquality: 0,
-                        aecc: 0
+                        youtube: 0, telegram: 0, instagram: 0,
+                        tiktok1: 0, tiktok2: 0, highquality: 0, aecc: 0,
+                        editingpack: 0   // <-- new link counter
                     });
-                    console.log('Created clicks document with all counts 0');
+                } else {
+                    // Ensure editingpack field exists if doc exists but field missing
+                    const existingData = clicksDoc.data();
+                    if (existingData.editingpack === undefined) {
+                        await clicksRef.update({ editingpack: 0 });
+                    }
                 }
-            } catch (error) {
-                console.error("Error initializing database:", error);
-            }
+            } catch (error) { console.error("init error:", error); }
         }
 
-        // ============================================
-        // VIEW COUNT LOGIC (atomic increment)
-        // ============================================
-        
+        // View tracking (atomic)
         async function trackView() {
-            // Check if user has been counted in this session
-            const hasViewed = sessionStorage.getItem('moonlight_view_counted');
-            
-            if (!hasViewed) {
+            if (!sessionStorage.getItem('moonlight_view_counted')) {
                 try {
-                    // Atomic increment - guaranteed to work even with concurrent users
-                    const viewsRef = db.collection('stats').doc('views');
-                    await viewsRef.set({ 
-                        count: increment 
-                    }, { merge: true });
-                    
-                    // Mark as counted
+                    await db.collection('stats').doc('views').set({ count: increment }, { merge: true });
                     sessionStorage.setItem('moonlight_view_counted', 'true');
-                    console.log('New view counted with atomic increment');
-                } catch (error) {
-                    console.error("Error incrementing view count:", error);
-                }
+                } catch(e) { console.error(e); }
             }
         }
 
-        // ============================================
-        // REAL-TIME LISTENERS (onSnapshot)
-        // ============================================
-        
-        // Listen for view count changes
+        // Real-time listeners (view + clicks)
         function setupViewListener() {
             db.collection('stats').doc('views').onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    document.getElementById('globalViewCount').textContent = formatNumber(data.count || 0);
-                }
-            }, (error) => {
-                console.error("View listener error:", error);
+                if (doc.exists) document.getElementById('globalViewCount').textContent = formatNumber(doc.data().count || 0);
             });
         }
         
-        // Listen for clicks data changes
         function setupClicksListener() {
             db.collection('stats').doc('clicks').onSnapshot((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
-                    
-                    // Update each link counter
                     document.getElementById('youtubeCount').textContent = formatNumber(data.youtube || 0);
                     document.getElementById('telegramCount').textContent = formatNumber(data.telegram || 0);
                     document.getElementById('instagramCount').textContent = formatNumber(data.instagram || 0);
@@ -829,105 +717,44 @@
                     document.getElementById('tiktok2Count').textContent = formatNumber(data.tiktok2 || 0);
                     document.getElementById('highqualityCount').textContent = formatNumber(data.highquality || 0);
                     document.getElementById('aeccCount').textContent = formatNumber(data.aecc || 0);
+                    if (document.getElementById('editingpackCount')) {
+                        document.getElementById('editingpackCount').textContent = formatNumber(data.editingpack || 0);
+                    }
                 }
-            }, (error) => {
-                console.error("Clicks listener error:", error);
             });
         }
 
-        // ============================================
-        // CLICK TRACKING (atomic increment)
-        // ============================================
-        
         async function trackClick(linkId) {
             try {
-                const clicksRef = db.collection('stats').doc('clicks');
-                // Atomic increment - guaranteed to work
-                await clicksRef.set({ 
-                    [linkId]: increment 
-                }, { merge: true });
-                
-                console.log(`Click tracked for ${linkId} using atomic increment`);
-            } catch (error) {
-                console.error("Error tracking click:", error);
-            }
+                await db.collection('stats').doc('clicks').set({ [linkId]: increment }, { merge: true });
+            } catch(e) { console.error(e); }
         }
 
-        // Add click event listeners to all cards
         function setupClickTracking() {
             document.querySelectorAll('.liquid-card').forEach(card => {
                 card.addEventListener('click', function(e) {
                     const linkId = this.dataset.linkId;
-                    if (linkId) {
-                        trackClick(linkId);
-                    }
+                    if (linkId) trackClick(linkId);
                 });
             });
         }
 
-        // ============================================
-        // LOADER - 7 SECONDS EXACT
-        // ============================================
+        // Loader 7 sec
         (function() {
             const loader = document.getElementById('liquid-loader');
-            const loaderDuration = 10000; // 7000ms = 7 seconds
-            
-            console.log('Loader started - will disappear in 7 seconds');
-            
-            function removeLoader() {
-                if (loader && !loader.classList.contains('loaded')) {
-                    loader.classList.add('loaded');
-                    console.log('Loader removed after 7 seconds');
-                }
-            }
-
-            // Remove loader after exactly 7 seconds
-            setTimeout(removeLoader, loaderDuration);
-            
-            // Also remove on window load as backup (but still respect minimum time)
-            window.addEventListener('load', function() {
-                setTimeout(removeLoader, 1000); // Remove 1 second after load if not already removed
-            });
-            
-            // To change loader duration, modify loaderDuration above
+            const loaderDuration = 7000;
+            setTimeout(() => { if(loader && !loader.classList.contains('loaded')) loader.classList.add('loaded'); }, loaderDuration);
+            window.addEventListener('load', () => setTimeout(() => { if(loader) loader.classList.add('loaded'); }, 1000));
         })();
 
-        // ============================================
-        // INITIALIZE EVERYTHING
-        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // First initialize database documents
             initializeDatabase().then(() => {
-                // Then set up real-time listeners
                 setupViewListener();
                 setupClicksListener();
-                
-                // Track this view (only once per session)
                 trackView();
-                
-                // Setup click tracking
                 setupClickTracking();
-                
-                console.log('Firebase counters initialized with atomic increments');
             });
         });
     </script>
-    
-    <!-- 
-        ============================================
-        HOW TO MANUALLY ADJUST LOADER TIME:
-        ============================================
-        
-        Find this line in the JavaScript:
-        const loaderDuration = 7000; // 7000ms = 7 seconds
-        
-        Change the number to adjust the time:
-        - 5000 = 5 seconds
-        - 7000 = 7 seconds (default)
-        - 10000 = 10 seconds
-        
-        The loader will always stay for the FULL duration
-        regardless of when the page finishes loading.
-    -->
 </body>
 </html>
